@@ -1,5 +1,8 @@
 <html>
   <head>
+  <link href='https://fonts.googleapis.com/css?family=Roboto:700' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Roboto:400' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Roboto:300' rel='stylesheet' type='text/css'>
     <style>
 * {
   box-sizing: border-box;
@@ -88,15 +91,64 @@ input:-webkit-autofill {
 ::selection {
   background: rgba(33, 150, 243, 0.3);
 }
+
+#definition {
+  color: white;
+  font: 300 18px Roboto;
+}
+
+#definition input {
+  color:#2196f3;
+  font: 300 22px Roboto;
+  text-align: left;
+  padding-left: 0;
+}
+
+.word_type {
+  color: rgba(255, 255, 255, 0.498039);
+  font: 400 22px Roboto;
+}
+
+ol li {
+  padding: 5px;
+}
     </style>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   </head>
   <body>
     <div class="centered">
       <div class="group">
-        <input type="text" id="name" required="required"/>
-        <label for="name">What new word did you learn?</label>
-        <div class="bar"></div>
+        <form id="word_form">
+          <input type="text" id="name" required="required"/>
+          <label for="name">What new word did you learn?</label>
+          <div class="bar"></div>
+        </form>
+      </div>
+      <div id="definition" style="display: none;">
+          <p class="word_type"> noun </p>
+          <ol>
+            <li>(any of various games played with a ball (round or oval) in which two teams try to kick or carry or propel the ball into each other's goal)</li>
+            <li>(the inflated oblong ball used in playing American football)</li>
+          </ol>
+          <input id="add_word" type="submit" value="Add word" />
       </div>
     </div>
+    <script type="text/javascript">
+      var input = $("#name");
+      input.focus();
+      input.select();
+
+      $("#word_form").submit(function( event ) {
+        $( "#definition" ).fadeIn( "slow" , function() {
+    // Animation complete.
+        });
+        event.preventDefault();
+      });
+
+      $("#add_word").click(function(event) {
+        alert("You just added this word to your dictionary.");
+        event.preventDefault();
+      })
+    </script>
   </body>
 </html>
