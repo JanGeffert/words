@@ -9,7 +9,7 @@
 }
 
 body {
-  background: #333;
+  background: #FFF;
 }
 
 .centered {
@@ -33,8 +33,8 @@ body {
 label {
   position: absolute;
   top: 36.66667px;
-  color: rgba(255, 255, 255, 0.5);
-  font: 400 36.66667px Roboto;
+  color: rgba(0, 0, 0, 0.4);
+  font: 300 36.66667px Roboto;
   cursor: text;
   transition: .25s ease;
 }
@@ -45,23 +45,23 @@ input {
   padding-top: 36.66667px;
   border: none;
   border-radius: 0;
-  color: white;
-  background: #333;
+  color: rgba(0,0,0,0.8);
+  background: #FFF;
   font-size: 36.66667px;
   transition: .3s ease;
 }
 input:valid ~ label {
   top: 0;
-  font: 700 22px Roboto;
-  color: rgba(255, 255, 255, 0.5);
+  font: 300 22px Roboto;
+  color: rgba(0, 0, 0, 0.4);
 }
 input:focus {
   outline: none;
 }
 input:focus ~ label {
   top: 0;
-  font: 700 22px Roboto;
-  color: #2196f3;
+  font: 300 22px Roboto;
+  color: rgba(0,0,0,0.6);
 }
 input:focus ~ .bar:before {
   transform: translateX(0);
@@ -72,28 +72,20 @@ input:-webkit-autofill {
 }
 
 .bar {
-  background: rgba(255, 255, 255, 0.5);
+  background: rgba(0, 0, 0, 0.6);
   content: '';
   width: 550px;
-  height: 3.66667px;
+  height: 2px;
   transition: .3s ease;
   position: relative;
 }
-.bar:before {
-  content: '';
-  position: absolute;
-  width: 100%;
-  height: 150%;
-  background: #2196f3;
-  transform: translateX(-100%);
-}
 
 ::selection {
-  background: rgba(33, 150, 243, 0.3);
+  background: rgba(0,0,0,0.4);
 }
 
 #definition {
-  color: white;
+  color: rgba(0,0,0,0.8);
   font: 300 18px Roboto;
 }
 
@@ -105,12 +97,13 @@ input:-webkit-autofill {
 }
 
 .word_type {
-  color: rgba(255, 255, 255, 0.498039);
+  color: rgba(0,0,0,0.6);
   font: 400 22px Roboto;
 }
 
 ol li {
-  padding: 5px;
+  padding: 10px;
+  line-height: 1.6em;
 }
     </style>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
@@ -127,16 +120,16 @@ ol li {
       <div id="definition" style="display: none;">
           <p class="word_type"> noun </p>
           <ol>
-            <li>(any of various games played with a ball (round or oval) in which two teams try to kick or carry or propel the ball into each other's goal)</li>
-            <li>(the inflated oblong ball used in playing American football)</li>
+            <li>any of various games played with a ball (round or oval) in which two teams try to kick or carry or propel the ball into each other's goal</li>
+            <li>the inflated oblong ball used in playing American football</li>
           </ol>
           <input id="add_word" type="submit" value="Add word" />
       </div>
     </div>
     <script type="text/javascript">
       var input = $("#name");
-      input.focus();
-      input.select();
+      // input.focus();
+      // input.select();
 
       $("#word_form").submit(function( event ) {
         $( "#definition" ).fadeIn( "slow" , function() {
@@ -146,7 +139,7 @@ ol li {
       });
 
       $("#add_word").click(function(event) {
-        alert("You just added this word to your dictionary.");
+        alert("You just added this word to your dictionary. ");
         event.preventDefault();
       })
     </script>
