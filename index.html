@@ -119,22 +119,32 @@ ol li {
       </div>
       <div id="definition" style="display: none;">
           <p class="word_type"> noun </p>
-          <ol>
-            <li>any of various games played with a ball (round or oval) in which two teams try to kick or carry or propel the ball into each other's goal</li>
-            <li>the inflated oblong ball used in playing American football</li>
+          <ol id="definition_list">
           </ol>
           <input id="add_word" type="submit" value="Add word" />
       </div>
     </div>
     <script type="text/javascript">
-      var input = $("#name");
-      // input.focus();
-      // input.select();
+    var wordnet;
+
+    var word_classes = {a:"adjective", n:"noun", r:"adverb", s:"satellite", v:"verb"};
+
+    var input = $("#name");
+    var ol = $("#definition_list");
 
       $("#word_form").submit(function( event ) {
+        ol.empty()
         $( "#definition" ).fadeIn( "slow" , function() {
     // Animation complete.
         });
+        for(var syn in wordnet.synset) {
+          for(var i in wordnet.synset[syn].word) {
+            if(wordnet.synset[syn].word[i] == input.val()) {
+              console.log(word_classes[wordnet.synset[syn].pos]);
+              var li = $("<li/>").text(wordnet.synset[syn].gloss).appendTo(ol);
+            }
+          }
+        }
         event.preventDefault();
       });
 
@@ -142,6 +152,27 @@ ol li {
         alert("You just added this word to your dictionary. ");
         event.preventDefault();
       })
+
+$(document).ready(function(){
+
+     function postProcessing(data) {
+      wordnet = data;
+     }
+
+
+    getValues();
+
+        function getValues(){
+             $.ajax({
+                url: 'wordnet.json',
+                type: 'get',
+                dataType: 'json',
+                cache: false,
+                success: postProcessing,
+                async:true,
+                });
+        };
+})
     </script>
   </body>
 </html>
