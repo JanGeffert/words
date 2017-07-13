@@ -16,6 +16,7 @@ body {
   width: 550px;
   height: 110px;
   margin: auto;
+  margin-top: 20px;
   position: absolute;
   top: 0;
   bottom: 0;
@@ -117,12 +118,13 @@ ol li {
           <div class="bar"></div>
         </form>
       </div>
+      <input id="add_word" type="submit" value="Add word" />
       <div id="definition" style="display: none;">
-          <p class="word_type"> noun </p>
+<!--           <p class="word_type"> noun </p>
           <ol id="definition_list">
-          </ol>
-          <input id="add_word" type="submit" value="Add word" />
+          </ol> -->
       </div>
+                
     </div>
     <script type="text/javascript">
     var wordnet;
@@ -132,38 +134,69 @@ ol li {
     var input = $("#name");
     var ol = $("#definition_list");
 
-      $("#word_form").submit(function( event ) {
-        ol.empty()
-        $( "#definition" ).fadeIn( "slow" , function() {
-    // Animation complete.
-        });
-        for(var syn in wordnet.synset) {
-          for(var i in wordnet.synset[syn].word) {
-            if(wordnet.synset[syn].word[i] == input.val()) {
-              console.log(word_classes[wordnet.synset[syn].pos]);
-              var li = $("<li/>").text(wordnet.synset[syn].gloss).appendTo(ol);
-            }
+    var typingTimer;                //timer identifier
+    var doneTypingInterval = 200;  //time in ms (5 seconds)
+
+    //on keyup, start the countdown
+    input.keyup(function(){
+      clearTimeout(typingTimer);
+      if (input.val()) {
+        typingTimer = setTimeout(doneTyping, doneTypingInterval);
+      }
+    });
+
+    //user is "finished typing," do something
+    function doneTyping () {
+      $( "#definition" ).empty()
+    
+      var word = {a:[], n:[], r:[], s:[], v:[]};
+
+      for(var syn in wordnet.synset) {
+        for(var i in wordnet.synset[syn].word) {
+          if(wordnet.synset[syn].word[i].toUpperCase() == $.trim(input.val()).toUpperCase()) {
+            // console.log(word_classes[wordnet.synset[syn].pos]);
+            var pos = wordnet.synset[syn].pos;
+            word[pos].push(wordnet.synset[syn].gloss);
           }
         }
-        event.preventDefault();
+      }
+
+      for(var c in word) {
+        if (word[c].length > 0) {
+          console.log(word_classes[c]);
+
+          var word_type = $("<p />").addClass("word_type").text(word_classes[c]).appendTo($("#definition"))
+          var definition_list = $("<ol />").addClass("definition_list").appendTo($("#definition"))
+          for(var i in word[c]) {
+            var li = $("<li />").text(word[c][i]).appendTo(definition_list);
+          }
+        }
+      }
+
+      $( "#definition" ).fadeIn( "slow" , function() {
+        // Animation complete.
       });
+    }
 
-      $("#add_word").click(function(event) {
-        alert("You just added this word to your dictionary. ");
-        event.preventDefault();
-      })
+    $("#word_form").submit(function( event ) {
+      doneTyping();
+      event.preventDefault();
+    });
 
-$(document).ready(function(){
+    $("#add_word").click(function(event) {
+      alert("You just added this word to your dictionary. ");
+      event.preventDefault();
+    })
 
-     function postProcessing(data) {
-      wordnet = data;
-     }
-
-
-    getValues();
+    $(document).ready(function(){
+        function postProcessing(data) {
+          wordnet = data;
+        }
+      
+        getValues();
 
         function getValues(){
-             $.ajax({
+              $.ajax({
                 url: 'wordnet.json',
                 type: 'get',
                 dataType: 'json',
@@ -172,7 +205,7 @@ $(document).ready(function(){
                 async:true,
                 });
         };
-})
+      })
     </script>
   </body>
 </html>
